@@ -60,33 +60,33 @@ async function scrape(url) {
     });
 
     // Scrape investigation/negative/confirmed list
-    const incListObj = {};
-    let incList = await page.evaluate(() => {
+    const testListObj = {};
+    let testList = await page.evaluate(() => {
       const listItems = document.querySelectorAll(
         '#c50212 > div > div > ul > li'
       );
       return Array.from(listItems, (listItem) => listItem.innerText);
     });
 
-    incList.forEach((item, index, arr) => {
-      incListObj[incList[index].match(/[^\:]*/)[0].replace(/\d/g, '')] = Number(
-        incList[index].replace(/[^:]*:\s/, '').replace(/\s/g, '')
-      );
+    testList.forEach((item, index, arr) => {
+      testListObj[
+        testList[index].match(/[^\:]*/)[0].replace(/\d/g, '')
+      ] = Number(testList[index].replace(/[^:]*:\s/, '').replace(/\s/g, ''));
     });
 
-    let incListArray = [];
-    incList.forEach((item, index, arr) => {
-      incListArray.push({
-        number: incList[index].match(/[^\:]*/)[0].replace(/\d/g, ''),
+    let testsArray = [];
+    testList.forEach((item, index, arr) => {
+      testsArray.push({
+        number: testList[index].match(/[^\:]*/)[0].replace(/\d/g, ''),
         value: (alue = Number(
-          incList[index].replace(/[^:]*:\s/, '').replace(/\s/g, '')
+          testList[index].replace(/[^:]*:\s/, '').replace(/\s/g, '')
         )),
       });
     });
 
-    incListArray[0].number = 'Under investigation';
-    incListArray[1].number = 'Negative';
-    incListArray[2].number = 'Positive';
+    testsArray[0].number = 'Under investigation';
+    testsArray[1].number = 'Negative';
+    testsArray[2].number = 'Positive';
 
     // Scrape hospitalization list
     const hospListObj = {};
@@ -169,7 +169,7 @@ async function scrape(url) {
       total,
       regions: casesTableObject,
       casesByAge: casesByAgeTableObject,
-      incListArray: incListArray,
+      testsArray: testsArray,
       hospListArray: hospListArray,
       deaths: totalDeaths,
       deathsByRegion: deathsByRegionTableObject,
