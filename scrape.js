@@ -46,7 +46,7 @@ async function getData() {
   const total = qcData.total;
   const regions = qcData.regions;
   const casesByAge = qcData.casesByAge;
-  const tests = qcData.incListArray;
+  const tests = qcData.testsArray;
   const hospitalizations = qcData.hospListArray;
   const deaths = qcData.deaths;
   const deathsByRegion = qcData.deathsByRegion;
