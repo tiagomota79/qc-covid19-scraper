@@ -52,10 +52,12 @@ async function getQcData() {
   const deathsByAge = qcData.deathsByAge;
 
   // Function to get the documents collections and update the DB
-  function updateCollection(collection, data) {
+  async function updateCollection(collection, data) {
     const collectionToUpdate = db.collection(collection);
 
-    collectionToUpdate.updateOne(
+    console.log(`Writing ${JSON.stringify(data)} to ${collection}`);
+
+    await collectionToUpdate.updateOne(
       { date: today },
       { $set: { date: today, data } },
       { upsert: true }
@@ -63,14 +65,14 @@ async function getQcData() {
   }
 
   // Update every collection in the DB
-  updateCollection('totalCasesPerDay', total);
-  updateCollection('casesByRegion', regions);
-  updateCollection('casesByAgeGroup', casesByAge);
-  updateCollection('tests', tests);
-  updateCollection('hospitalization', hospitalizations);
-  updateCollection('totalDeaths', deaths);
-  updateCollection('deathsByRegion', deathsByRegion);
-  updateCollection('deathsByAge', deathsByAge);
+  await updateCollection('totalCasesPerDay', total);
+  await updateCollection('casesByRegion', regions);
+  await updateCollection('casesByAgeGroup', casesByAge);
+  await updateCollection('tests', tests);
+  await updateCollection('hospitalization', hospitalizations);
+  await updateCollection('totalDeaths', deaths);
+  await updateCollection('deathsByRegion', deathsByRegion);
+  await updateCollection('deathsByAge', deathsByAge);
 
   console.log('Quebec data updated in DB');
 }
@@ -85,15 +87,19 @@ async function getCaData() {
     new Date().getMonth() + 1
   }-${new Date().getDate()}`;
 
-  // Get the collection
-  const collection = db.collection('canadaData');
+  async function updateCollection(collection, data) {
+    const collectionToUpdate = db.collection(collection);
 
-  // Insert/update document in collection
-  collection.updateOne(
-    { date: today },
-    { $set: { date: today, data: caData } },
-    { upsert: true }
-  );
+    console.log(`Writing ${JSON.stringify(data)} to ${collection}`);
+
+    await collectionToUpdate.updateOne(
+      { date: today },
+      { $set: { date: today, data } },
+      { upsert: true }
+    );
+
+    await updateCollection('canadaData', caData);
+  }
 
   console.log('Canada data updated in DB');
 }
@@ -103,6 +109,7 @@ async function getCaData() {
     await getCaData();
     await getQcData();
   } catch (e) {
-    console.log(e);
+    const error = JSON.stringify(e);
+    console.log(error);
   }
 })();
