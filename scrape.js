@@ -38,49 +38,45 @@ client.connect(function (err) {
 // Get data and update DB
 async function getData() {
   // Get data from scrapers
-  try {
-    const qcData = await scrape(pageURL);
-    const caData = await scrapeCanada(canadaURL);
+  const qcData = await scrape(pageURL);
+  const caData = await scrapeCanada(canadaURL);
 
-    // Assign each data to a variable
-    const today = qcData.date;
-    const total = qcData.total;
-    const regions = qcData.regions;
-    const casesByAge = qcData.casesByAge;
-    const tests = qcData.testsArray;
-    const hospitalizations = qcData.hospListArray;
-    const deaths = qcData.deaths;
-    const deathsByRegion = qcData.deathsByRegion;
-    const deathsByAge = qcData.deathsByAge;
-    //   const caTotal = caData.total;
-    //   const caPobable = caData.probable;
-    //   const caTested = caData.tested;
-    //   const caDeaths = caData.deaths;
+  // Assign each data to a variable
+  const today = qcData.date;
+  const total = qcData.total;
+  const regions = qcData.regions;
+  const casesByAge = qcData.casesByAge;
+  const tests = qcData.testsArray;
+  const hospitalizations = qcData.hospListArray;
+  const deaths = qcData.deaths;
+  const deathsByRegion = qcData.deathsByRegion;
+  const deathsByAge = qcData.deathsByAge;
+  //   const caTotal = caData.total;
+  //   const caPobable = caData.probable;
+  //   const caTested = caData.tested;
+  //   const caDeaths = caData.deaths;
 
-    // Function to get the documents collections and update the DB
-    function updateCollection(collection, data) {
-      const collectionToUpdate = db.collection(collection);
+  // Function to get the documents collections and update the DB
+  function updateCollection(collection, data) {
+    const collectionToUpdate = db.collection(collection);
 
-      collectionToUpdate.updateOne(
-        { date: today },
-        { $set: { date: today, data } },
-        { upsert: true }
-      );
-    }
-
-    // Update every collection in the DB
-    updateCollection('totalCasesPerDay', total);
-    updateCollection('casesByRegion', regions);
-    updateCollection('casesByAgeGroup', casesByAge);
-    updateCollection('tests', tests);
-    updateCollection('hospitalization', hospitalizations);
-    updateCollection('totalDeaths', deaths);
-    updateCollection('deathsByRegion', deathsByRegion);
-    updateCollection('deathsByAge', deathsByAge);
-    updateCollection('canadaData', caData);
-  } catch (e) {
-    console.log(e);
+    collectionToUpdate.updateOne(
+      { date: today },
+      { $set: { date: today, data } },
+      { upsert: true }
+    );
   }
+
+  // Update every collection in the DB
+  updateCollection('totalCasesPerDay', total);
+  updateCollection('casesByRegion', regions);
+  updateCollection('casesByAgeGroup', casesByAge);
+  updateCollection('tests', tests);
+  updateCollection('hospitalization', hospitalizations);
+  updateCollection('totalDeaths', deaths);
+  updateCollection('deathsByRegion', deathsByRegion);
+  updateCollection('deathsByAge', deathsByAge);
+  updateCollection('canadaData', caData);
 }
 
 (async function () {
