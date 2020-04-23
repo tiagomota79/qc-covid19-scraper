@@ -97,10 +97,9 @@ async function getCaData() {
       { $set: { date: today, data } },
       { upsert: true }
     );
-
-    await updateCollection('canadaData', caData);
   }
 
+  await updateCollection('canadaData', caData);
   console.log('Canada data updated in DB');
 }
 
