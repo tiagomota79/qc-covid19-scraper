@@ -51,10 +51,6 @@ async function getData() {
   const deaths = qcData.deaths;
   const deathsByRegion = qcData.deathsByRegion;
   const deathsByAge = qcData.deathsByAge;
-  //   const caTotal = caData.total;
-  //   const caPobable = caData.probable;
-  //   const caTested = caData.tested;
-  //   const caDeaths = caData.deaths;
 
   // Function to get the documents collections and update the DB
   function updateCollection(collection, data) {
