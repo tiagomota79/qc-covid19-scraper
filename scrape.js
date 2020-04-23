@@ -76,5 +76,10 @@ async function getData() {
 }
 
 (async function () {
-  await getData();
+  try {
+    await getData();
+  } catch (e) {
+    const error = JSON.stringify(e);
+    console.log(error);
+  }
 })();

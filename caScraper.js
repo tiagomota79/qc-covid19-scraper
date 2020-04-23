@@ -49,7 +49,8 @@ async function scrapeCanada(url) {
     };
     console.log('data from Canada scraper', dataObj);
   } catch (e) {
-    console.log(e);
+    const error = JSON.stringify(e);
+    console.log(error);
   }
 
   //Close Puppeteer browser after scraping data

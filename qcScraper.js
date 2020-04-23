@@ -177,7 +177,8 @@ async function scrape(url) {
     };
     console.log('dataObj from scraper', dataObj);
   } catch (e) {
-    console.log(e);
+    const error = JSON.stringify(e);
+    console.log(error);
   }
 
   //Close Puppeteer browser after scraping data
