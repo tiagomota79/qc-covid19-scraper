@@ -36,10 +36,9 @@ client.connect(function (err) {
 });
 
 // Get data and update DB
-async function getData() {
-  // Get data from scrapers
+async function getQcData() {
+  // Get data from scraper
   const qcData = await scrape(pageURL);
-  const caData = await scrapeCanada(canadaURL);
 
   // Assign each data to a variable
   const today = qcData.date;
@@ -72,13 +71,39 @@ async function getData() {
   updateCollection('totalDeaths', deaths);
   updateCollection('deathsByRegion', deathsByRegion);
   updateCollection('deathsByAge', deathsByAge);
-  updateCollection('canadaData', caData);
+
+  console.log('Quebec data updated in DB');
+}
+
+// Get Canada data and update DB
+async function getCaData() {
+  // Get data from scraper
+  const caData = await scrapeCanada(canadaURL);
+
+  // Get today's date in YYYY-MM-DD format
+  const today = `${new Date().getFullYear()}-${
+    new Date().getMonth() + 1
+  }-${new Date().getDate()}`;
+
+  // Get the collection
+  const collection = db.collection('canadaData');
+
+  // Insert/update document in collection
+  collection.updateOne(
+    { date: today },
+    { $set: { date: today, data: caData } },
+    { upsert: true }
+  );
+
+  console.log('Canada data updated in DB');
 }
 
 (async function () {
   try {
-    await getData();
+    await getQcData();
+    await getCaData();
   } catch (e) {
+    console.log(e);
     const error = JSON.stringify(e);
     console.log(error);
   }
