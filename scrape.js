@@ -105,8 +105,8 @@ async function getCaData() {
 
 (async function () {
   try {
-    await getCaData();
     await getQcData();
+    await getCaData();
   } catch (e) {
     const error = JSON.stringify(e);
     console.log(error);
