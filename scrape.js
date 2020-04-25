@@ -82,31 +82,37 @@ async function getCaData() {
   // Get data from scraper
   const caData = await scrapeCanada(canadaURL);
 
+  console.log(!isNaN(caData.tested));
+
   // Get today's date in YYYY-MM-DD format
   const today = `${new Date().getFullYear()}-${
     new Date().getMonth() + 1
   }-${new Date().getDate()}`;
 
-  async function updateCollection(collection, data) {
-    const collectionToUpdate = db.collection(collection);
+  if (!isNaN(caData.tested)) {
+    async function updateCollection(collection, data) {
+      const collectionToUpdate = db.collection(collection);
 
-    console.log(`Writing ${JSON.stringify(data)} to ${collection}`);
+      console.log(`Writing ${JSON.stringify(data)} to ${collection}`);
 
-    await collectionToUpdate.updateOne(
-      { date: today },
-      { $set: { date: today, data } },
-      { upsert: true }
-    );
+      await collectionToUpdate.updateOne(
+        { date: today },
+        { $set: { date: today, data } },
+        { upsert: true }
+      );
+    }
+
+    await updateCollection('canadaData', caData);
+    console.log('Canada data updated in DB');
+  } else {
+    console.log('No data!');
   }
-
-  await updateCollection('canadaData', caData);
-  console.log('Canada data updated in DB');
 }
 
 (async function () {
   try {
     await getQcData();
-    // await getCaData();
+    await getCaData();
   } catch (e) {
     const error = JSON.stringify(e);
     console.log(error);
