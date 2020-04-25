@@ -40,6 +40,8 @@ async function getQcData() {
   // Get data from scraper
   const qcData = await scrape(pageURL);
 
+  console.log('testsArrayLength', qcData.testsArray.length);
+
   // Assign each data to a variable
   const today = qcData.date;
   const total = qcData.total;
@@ -51,38 +53,40 @@ async function getQcData() {
   const deathsByRegion = qcData.deathsByRegion;
   const deathsByAge = qcData.deathsByAge;
 
-  // Function to get the documents collections and update the DB
-  async function updateCollection(collection, data) {
-    const collectionToUpdate = db.collection(collection);
+  if (!isNaN(qcData.total) && qcData.testsArray.length === 3) {
+    // Function to get the documents collections and update the DB
+    async function updateCollection(collection, data) {
+      const collectionToUpdate = db.collection(collection);
 
-    console.log(`Writing ${JSON.stringify(data)} to ${collection}`);
+      console.log(`Writing ${JSON.stringify(data)} to ${collection}`);
 
-    await collectionToUpdate.updateOne(
-      { date: today },
-      { $set: { date: today, data } },
-      { upsert: true }
-    );
+      await collectionToUpdate.updateOne(
+        { date: today },
+        { $set: { date: today, data } },
+        { upsert: true }
+      );
+    }
+
+    // Update every collection in the DB
+    await updateCollection('totalCasesPerDay', total);
+    await updateCollection('casesByRegion', regions);
+    await updateCollection('casesByAgeGroup', casesByAge);
+    await updateCollection('tests', tests);
+    await updateCollection('hospitalization', hospitalizations);
+    await updateCollection('totalDeaths', deaths);
+    await updateCollection('deathsByRegion', deathsByRegion);
+    await updateCollection('deathsByAge', deathsByAge);
+
+    console.log('Quebec data updated in DB');
+  } else {
+    console.log('Quebec scraper returned no data. Nothing written to DB.');
   }
-
-  // Update every collection in the DB
-  await updateCollection('totalCasesPerDay', total);
-  await updateCollection('casesByRegion', regions);
-  await updateCollection('casesByAgeGroup', casesByAge);
-  await updateCollection('tests', tests);
-  await updateCollection('hospitalization', hospitalizations);
-  await updateCollection('totalDeaths', deaths);
-  await updateCollection('deathsByRegion', deathsByRegion);
-  await updateCollection('deathsByAge', deathsByAge);
-
-  console.log('Quebec data updated in DB');
 }
 
 // Get Canada data and update DB
 async function getCaData() {
   // Get data from scraper
   const caData = await scrapeCanada(canadaURL);
-
-  console.log(!isNaN(caData.tested));
 
   // Get today's date in YYYY-MM-DD format
   const today = `${new Date().getFullYear()}-${
@@ -105,7 +109,7 @@ async function getCaData() {
     await updateCollection('canadaData', caData);
     console.log('Canada data updated in DB');
   } else {
-    console.log('No data!');
+    console.log('Canada scraper returned no data. Nothing written to DB.');
   }
 }
 
