@@ -1,3 +1,6 @@
+const moment = require('moment');
+moment().format();
+
 // Import internal data and components
 const scrape = require('./qcScraper');
 const scrapeCanada = require('./caScraper');
@@ -86,10 +89,8 @@ async function getCaData() {
   // Get data from scraper
   const caData = await scrapeCanada(canadaURL);
 
-  // Get today's date in YYYY-MM-DD format
-  const today = `${new Date().getFullYear()}-${
-    new Date().getMonth() + 1
-  }-${new Date().getDate()}`;
+  // Gets today's date in YYYY-MM-DD format
+  const date = moment().format('YYYY-MM-DD');
 
   if (!isNaN(caData.tested) && Object.keys(caData).length === 4) {
     async function updateCollection(collection, data) {
