@@ -1,4 +1,6 @@
 const puppeteer = require('puppeteer');
+const moment = require('moment');
+moment().format();
 
 async function scrape(url) {
   //Initiate Puppeteer browser and direct to the URL
@@ -159,9 +161,7 @@ async function scrape(url) {
     });
 
     // Gets today's date in YYYY-MM-DD format
-    const date = `${new Date().getFullYear()}-${
-      new Date().getMonth() + 1
-    }-${new Date().getDate()}`;
+    const date = moment().format('YYYY-MM-DD');
 
     dataObj = {
       date: date,

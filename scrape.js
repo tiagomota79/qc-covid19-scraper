@@ -40,8 +40,6 @@ async function getQcData() {
   // Get data from scraper
   const qcData = await scrape(pageURL);
 
-  console.log('testsArrayLength', qcData.testsArray.length);
-
   // Assign each data to a variable
   const today = qcData.date;
   const total = qcData.total;
@@ -93,7 +91,7 @@ async function getCaData() {
     new Date().getMonth() + 1
   }-${new Date().getDate()}`;
 
-  if (!isNaN(caData.tested)) {
+  if (!isNaN(caData.tested) && Object.keys(caData).length === 4) {
     async function updateCollection(collection, data) {
       const collectionToUpdate = db.collection(collection);
 
