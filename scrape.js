@@ -90,7 +90,7 @@ async function getCaData() {
   const caData = await scrapeCanada(canadaURL);
 
   // Gets today's date in YYYY-MM-DD format
-  const date = moment().format('YYYY-MM-DD');
+  const today = moment().format('YYYY-MM-DD');
 
   if (!isNaN(caData.tested) && Object.keys(caData).length === 4) {
     async function updateCollection(collection, data) {
