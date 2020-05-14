@@ -79,15 +79,20 @@ async function scrape(url) {
     testList.forEach((item, index, arr) => {
       testsArray.push({
         number: testList[index].match(/[^\:]*/)[0].replace(/\d/g, ''),
-        value: (alue = Number(
+        value: Number(
           testList[index].replace(/[^:]*:\s/, '').replace(/\s/g, '')
-        )),
+        ),
       });
     });
 
-    testsArray[0].number = 'Under investigation';
-    testsArray[1].number = 'Negative';
-    testsArray[2].number = 'Positive';
+    testsArray[0].number = `Samples taken on ${moment()
+      .subtract(2, 'd')
+      .format('dddd, MMMM Do, YYYY')}`;
+    testsArray[1].number = `Analyzes carried out on ${moment()
+      .subtract(2, 'd')
+      .format('dddd, MMMM Do, YYYY')}`;
+    testsArray[2].number = 'Negative';
+    testsArray[3].number = 'Positive';
 
     // Scrape hospitalization list
     const hospListObj = {};
@@ -108,9 +113,9 @@ async function scrape(url) {
     hospList.forEach((item, index, arr) => {
       hospListArray.push({
         number: hospList[index].match(/[^\:]*/)[0].replace(/\d/g, ''),
-        value: (alue = Number(
+        value: Number(
           hospList[index].replace(/[^:]*:\s/, '').replace(/\s/g, '')
-        )),
+        ),
       });
     });
 

@@ -54,7 +54,7 @@ async function getQcData() {
   const deathsByRegion = qcData.deathsByRegion;
   const deathsByAge = qcData.deathsByAge;
 
-  if (!isNaN(qcData.total) && qcData.testsArray.length === 3) {
+  if (!isNaN(qcData.total) && qcData.hospListArray.length === 3) {
     // Function to get the documents collections and update the DB
     async function updateCollection(collection, data) {
       const collectionToUpdate = db.collection(collection);
