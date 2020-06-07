@@ -92,7 +92,7 @@ async function getCaData() {
   // Gets today's date in YYYY-MM-DD format
   const today = moment().format('YYYY-MM-DD');
 
-  if (!isNaN(caData.tested) && Object.keys(caData).length === 4) {
+  if (!isNaN(caData.tested) && Object.keys(caData).length === 3) {
     async function updateCollection(collection, data) {
       const collectionToUpdate = db.collection(collection);
 
