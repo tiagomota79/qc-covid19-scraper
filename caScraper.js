@@ -24,18 +24,18 @@ async function scrapeCanada(url) {
       return Number(totalCanada.replace(/,/g, ''));
     });
 
-    // // Get probable cases from the government webpage, remove the comma and convert to number
-    // const probable = await page.evaluate(() => {
-    //   const totalCanada = document.querySelector(
-    //     '#wb-auto-5 > div:nth-child(3) > section > p.h2.mrgn-tp-md'
-    //   ).textContent;
-    //   return Number(totalCanada.replace(/,/g, ''));
-    // });
+    // Get recovered cases from the government webpage, remove the comma and convert to number
+    const recovered = await page.evaluate(() => {
+      const totalCanada = document.querySelector(
+        '#wb-auto-5 > div:nth-child(3) > section > p.h2.mrgn-tp-md'
+      ).textContent;
+      return Number(totalCanada.replace(/,/g, ''));
+    });
 
     // Get deaths from the government webpage, remove the comma and convert to number
     const deaths = await page.evaluate(() => {
       const totalCanada = document.querySelector(
-        '#wb-auto-5 > div:nth-child(3) > section > p.h2.mrgn-tp-md'
+        '#wb-auto-5 > div.col-md-2 > section > p.h2.mrgn-tp-md'
       ).textContent;
       return Number(totalCanada.replace(/,/g, ''));
     });
@@ -43,6 +43,7 @@ async function scrapeCanada(url) {
     dataObj = {
       tested,
       total,
+      recovered,
       deaths,
     };
     console.log('data from Canada scraper', dataObj);
