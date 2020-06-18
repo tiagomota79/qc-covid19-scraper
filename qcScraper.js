@@ -13,7 +13,7 @@ async function scrape(url) {
     // Get total cases from the government webpage, remove the whitespace and convert to number
     const total = await page.evaluate(() => {
       const cellContents = document.querySelector(
-        '.contenttable tbody tr:last-of-type td:last-of-type'
+        '#csv-display-cas-par-region > table tbody tr:last-of-type td:last-of-type'
       ).textContent;
       return Number(cellContents.replace(/\s/g, '').match(/(\d+)/g)[0]);
     });
@@ -21,7 +21,7 @@ async function scrape(url) {
     // Get full cases table from government webpage
     const casesTable = await page.evaluate(() => {
       const rows = document.querySelectorAll(
-        '#c50214 > div > div > div > table > tbody tr'
+        '#csv-display-cas-par-region > table > tbody tr'
       );
       return Array.from(rows, (row) => {
         const columns = row.querySelectorAll('td');
@@ -43,7 +43,7 @@ async function scrape(url) {
     // Get cases by age group table
     const casesByAgeTable = await page.evaluate(() => {
       const rows = document.querySelectorAll(
-        '#c50213 > div > div > div > table > tbody tr'
+        '#csv-display-cas-par-age > table > tbody tr'
       );
       return Array.from(rows, (row) => {
         const columns = row.querySelectorAll('td');
@@ -126,7 +126,7 @@ async function scrape(url) {
     // Scrape deaths by region table
     const deathsByRegionTable = await page.evaluate(() => {
       const rows = document.querySelectorAll(
-        '#c51880 > div > div > div > table > tbody tr'
+        '#csv-display-deces-par-region > table > tbody tr'
       );
       return Array.from(rows, (row) => {
         const columns = row.querySelectorAll('td');
@@ -148,7 +148,7 @@ async function scrape(url) {
     // Get deaths by age group table
     const deathsByAgeTable = await page.evaluate(() => {
       const rows = document.querySelectorAll(
-        '#c51881 > div > div > div > table > tbody tr'
+        '#csv-display-deces-par-age > table > tbody tr'
       );
       return Array.from(rows, (row) => {
         const columns = row.querySelectorAll('td');
