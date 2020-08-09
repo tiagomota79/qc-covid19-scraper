@@ -64,7 +64,7 @@ async function scrape(url) {
     const testListObj = {};
     let testList = await page.evaluate(() => {
       const listItems = document.querySelectorAll(
-        '#c50212 > div > div > ul > li'
+        '#c50212 > div:nth-child(3) > div:nth-child(1) > ul:nth-child(1) > li'
       );
       return Array.from(listItems, (listItem) => listItem.innerText);
     });
@@ -72,7 +72,7 @@ async function scrape(url) {
     testList.forEach((item, index, arr) => {
       testListObj[
         testList[index].match(/[^\:]*/)[0].replace(/\d/g, '')
-      ] = Number(testList[index].replace(/[^:]*:\s/, '').replace(/\s/g, ''));
+      ] = Number(testList[index].replace(/[^:]*:\s/, '').replace(/,/g, ''));
     });
 
     let testsArray = [];
@@ -80,7 +80,7 @@ async function scrape(url) {
       testsArray.push({
         number: testList[index].match(/[^\:]*/)[0].replace(/\d/g, ''),
         value: Number(
-          testList[index].replace(/[^:]*:\s/, '').replace(/\s/g, '')
+          testList[index].replace(/[^:]*:\s/, '').replace(/,/g, '')
         ),
       });
     });
